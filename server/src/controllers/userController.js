@@ -1,15 +1,22 @@
 const User = require("../model/User");
+const bcrypt = require('bcrypt');
 
 
 const postUser = ('/users', async (req, res) => {
-    await User.create(req.body);
+
+    const {username, email, password} = req.body;
+
+    const hashedPwd = await bcrypt.hash(password, 10);
+    await User.create({
+        username, email, password: hashedPwd
+    });
     res.send('User is Inserted!');
 })
 
 const getAllUsers = ('/users', async (req, res) => {
 
     const pageAsNum = Number.parseInt(req.query.page);
-    const sizeAsNum = Number.parseInt(req.query.size);
+    const sizeAsNum = Number.parseInt(req.query.size);  
 
     let page = 0;
     if (!Number.isNaN(pageAsNum) && pageAsNum > 0){

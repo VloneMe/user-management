@@ -1,5 +1,6 @@
 const express = require("express");
 const sequelize = require('./src/config/db');
+const cors = require('cors');
 const User = require("./src/model/User");
 
 
@@ -23,6 +24,7 @@ const port = 5000
 const server = express();
 
 server.use(express.json());
+server.use(cors());
 
 server.use('/api/users', require('./src/Routes/usersRoute'));
 
