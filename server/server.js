@@ -9,13 +9,9 @@ sequelize.sync(
 ).then(async () => {
     
     for (let i = 0; i < 23; i++){
-        const user = {
-            username: `user-${i}`,
-            email: `user-${1}@yahoo.com`,
-            password: 'pass6code'
-        }
 
-        // await User.create(user);
+        // const user = await User.findOne({wheere: {email: 'user-1@yahoo.com'}})
+        // await User.destroy(user);
     }
     console.log('[server]: Database Connected Succesful!')
 })
