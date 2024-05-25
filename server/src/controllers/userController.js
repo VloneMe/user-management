@@ -7,8 +7,28 @@ const postUser = ('/users', async (req, res) => {
 })
 
 const getAllUsers = ('/users', async (req, res) => {
-    const users = await User.findAll();
-    res.send(users);
+
+    const pageAsNum = Number.parseInt(req.query.page);
+    const sizeAsNum = Number.parseInt(req.query.size);
+
+    let page = 0;
+    if (!Number.isNaN(pageAsNum) && pageAsNum > 0){
+        page = pageAsNum;
+    };
+
+    let size = 10;
+    if (!Number.isNaN(sizeAsNum) && sizeAsNum > 0 && sizeAsNum < 10){
+        size = sizeAsNum;
+    }
+
+    const users = await User.findAndCountAll({
+        limit: size,
+        offset: page * size
+    });
+    res.send({
+        content: users.rows,
+        totalPages: Math.ceil(users.count / size)
+    });
 });
 
 const getUserById = ('/users/:id', async (req, res) => {
