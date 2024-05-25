@@ -2,23 +2,6 @@
 
 A simple React-based user management application using Material Tailwind components. The app allows for creating and updating user information.
 
-## Table of Contents
-
-- [Demo](#demo)
-- [Features](#features)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Running the Application](#running-the-application)
-- [Usage](#usage)
-- [API](#api)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
-
-## Demo
-
-You can find a live demo of the application [here](#). (Update with actual link if available)
 
 ## Features
 
@@ -51,3 +34,16 @@ cd either client or server directory
 npm install
 # or
 yarn install
+
+
+## Usage
+Once the application is running, you can access it in your web browser. You can create new users, update existing ones, and perform password validation.
+
+## API
+The application interacts with an API for user management. Make sure your API server is running and accessible at http://localhost:5000/api.
+
+## Endpoints
+- GET /api/users: Fetches the list of users
+- POST /api/users: Creates a new user
+- PUT /api/users/:id: Updates an existing user
+
