@@ -24,6 +24,10 @@ server.use(cors());
 
 server.use('/api/users', require('./src/Routes/usersRoute'));
 
+server.use((err, req, res, next) => {
+    return res.status(err.status).send({message: err.message});
+    next();
+});
 
 server.listen(port, () => {
     console.log(`[server]: Running at http://localhost:${port}`)

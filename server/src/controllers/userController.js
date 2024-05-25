@@ -38,9 +38,30 @@ const getAllUsers = ('/users', async (req, res) => {
     });
 });
 
-const getUserById = ('/users/:id', async (req, res) => {
-    const reqID = req.params.id;
+
+function InvalidIDException(){
+    this.status = 400;
+    this.message = "Invalid ID!"
+}
+
+function UserNotFoundException(){
+    this.status = 404;
+    this.message = "User were not Found!"
+}
+
+
+const getUserById = ('/users/:id', async (req, res, next) => {
+    const reqID = Number.parseInt(req.params.id);
+
+    if (Number.isNaN(reqID)){
+        // return res.status(400).send({message: "Invalid ID!"})
+        next(new InvalidIDException());
+    }
     const user = await User.findOne({where: {id: reqID}})
+
+    if (!user){
+        next(new UserNotFoundException())
+    }
     res.send(user);
 })
 

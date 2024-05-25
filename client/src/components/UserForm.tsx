@@ -6,7 +6,7 @@ interface UserFormProps {
     id: string;
     username: string;
     email: string;
-    password?: string; // Password might not be passed initially
+    password?: string;
   };
 }
 
@@ -47,24 +47,24 @@ export function UserForm({ user }: UserFormProps) {
     e.preventDefault();
     setError("");
     setSuccess("");
-
+  
     if (!username || !email) {
       setError("Please fill in all fields");
       return;
     }
-
+  
     const passwordError = validatePassword(password);
     if (password && passwordError) {
       setError(passwordError);
       return;
     }
-
+  
     const userData = {
       username,
       email,
-      ...(password && { password }), // Include password only if it's provided
+      password
     };
-
+  
     try {
       const response = await fetch(`http://localhost:5000/api/users${user ? `/${user.id}` : ''}`, {
         method: user ? 'PUT' : 'POST',
@@ -73,14 +73,14 @@ export function UserForm({ user }: UserFormProps) {
         },
         body: JSON.stringify(userData),
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const result = await response.json();
       console.log(user ? "User updated successfully:" : "User created successfully:", result);
-
+  
       setUsername("");
       setEmail("");
       setPassword("");
@@ -90,14 +90,15 @@ export function UserForm({ user }: UserFormProps) {
       setError(user ? 'Failed to update user. Please try again.' : 'Failed to create user. Please try again.');
     }
   };
-
+  
+  
   return (
-    <Card color="transparent" shadow={false} className="w-full max-w-full justify-center">
+    <Card color="transparent" shadow={false} className="w-full max-w-full justify-center py-10">
       <Typography variant="h4" color="blue-gray" className="text-center max-w-6xl h-full w-full">
         {user ? 'Update User' : 'Create New User'}
       </Typography>
       
-      <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96" onSubmit={handleSubmit}>
+      <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96 mx-auto" onSubmit={handleSubmit}>
         <div className="mb-1 flex flex-col gap-6">
           <Typography variant="h6" color="blue-gray" className="-mb-3">
             Username
