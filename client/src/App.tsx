@@ -27,7 +27,7 @@ export default function App(){
           <UserTable />
 
           <Dialog open={open} handler={handleOpen}>
-          <DialogBody>
+          <DialogBody className="w-full flex mx-auto">
             <UserForm />
           </DialogBody>
           </Dialog>

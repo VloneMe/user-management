@@ -14,7 +14,6 @@ export function UserForm({ user }: UserFormProps) {
   const [username, setUsername] = useState(user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -25,6 +24,25 @@ export function UserForm({ user }: UserFormProps) {
     }
   }, [user]);
 
+  const validatePassword = (password: string) => {
+    if (password.length < 8) {
+      return "Password must be at least 8 characters long";
+    }
+    if (!/[A-Z]/.test(password)) {
+      return "Password must contain at least one uppercase letter";
+    }
+    if (!/[a-z]/.test(password)) {
+      return "Password must contain at least one lowercase letter";
+    }
+    if (!/[0-9]/.test(password)) {
+      return "Password must contain at least one digit";
+    }
+    if (!/[!@#$%^&*]/.test(password)) {
+      return "Password must contain at least one special character";
+    }
+    return "";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -34,15 +52,17 @@ export function UserForm({ user }: UserFormProps) {
       setError("Please fill in all fields");
       return;
     }
-    if (password && password !== confirmPassword) {
-      setError("Passwords do not match");
+
+    const passwordError = validatePassword(password);
+    if (password && passwordError) {
+      setError(passwordError);
       return;
     }
 
     const userData = {
       username,
       email,
-      ...(password && { password }),
+      ...(password && { password }), // Include password only if it's provided
     };
 
     try {
@@ -64,7 +84,6 @@ export function UserForm({ user }: UserFormProps) {
       setUsername("");
       setEmail("");
       setPassword("");
-      setConfirmPassword("");
       setSuccess(user ? "User updated successfully!" : "User created successfully!");
     } catch (error) {
       console.error(user ? 'Error updating user:' : 'Error creating user:', error);
@@ -73,7 +92,7 @@ export function UserForm({ user }: UserFormProps) {
   };
 
   return (
-    <Card color="transparent" shadow={false}>
+    <Card color="transparent" shadow={false} className="w-full max-w-full justify-center">
       <Typography variant="h4" color="blue-gray" className="text-center max-w-6xl h-full w-full">
         {user ? 'Update User' : 'Create New User'}
       </Typography>
@@ -115,20 +134,6 @@ export function UserForm({ user }: UserFormProps) {
             placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="!border-t-blue-gray-200 focus:!border-t-gray-900"
-            labelProps={{
-              className: "before:content-none after:content-none",
-            }}
-          />
-          <Typography variant="h6" color="blue-gray" className="-mb-3">
-            Confirm Password
-          </Typography>
-          <Input
-            type="password"
-            size="lg"
-            placeholder="Confirm password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
             className="!border-t-blue-gray-200 focus:!border-t-gray-900"
             labelProps={{
               className: "before:content-none after:content-none",
